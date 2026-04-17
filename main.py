@@ -25,7 +25,9 @@ class Album(Base):
     ano_lancamento = Column(Integer) 
     gravadora = Column(String(100))
     
+
     artista_id = Column(Integer, ForeignKey("artistas.id"))
+
 
     artista = relationship("Artista", back_populates="albuns")
 
@@ -36,3 +38,30 @@ class Album(Base):
 engine = create_engine("sqlite:///produtora.db")
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
+
+
+def cadastrar_artista():
+    with Session() as session:
+        try:
+            nome_artista = input("Digite o nome do artista: ").capitalize().strip()
+            genero = input("Digite o genero do artista:  ").capitalize().strip()
+            pais = input("Digite o país do artista ").capitalize().strip()
+            biografia = input("Digite a biografia do artista: ").capitalize()
+
+            novo_artista = Artista(
+                nome = nome_artista,
+                genero = genero,
+                pais = pais,
+                biografia = biografia
+
+            )
+
+            session.add(novo_artista)
+            session.commit()
+
+            print(f"\n Artista {nome_artista} cadastrado com sucesso !!")
+        except Exception as erro:
+            session.rollback()
+            print("Ocorreu um erro!")
+
+cadastrar_artista()
