@@ -27,9 +27,12 @@ class Album(Base):
     
     artista_id = Column(Integer, ForeignKey("artistas.id"))
 
-
     artista = relationship("Artista", back_populates="albuns")
-    
 
     def __repr__(self):
         return f"Album: {self.id}, nome:{self.titulo}, ano:{self.ano_lancamento}, gravadora: {self.gravadora}, artista: {self.artista_id}"
+
+
+engine = create_engine("sqlite:///produtora.db")
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
