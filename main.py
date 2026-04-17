@@ -238,3 +238,27 @@ def deletar_album():
 
 # deletar_album()
 
+def deletar_artista():
+    with Session() as session:
+        try:
+            nome_busca = input("Digite o nome do artista que deseja deletar: ").capitalize().strip()
+            artista = session.query(Artista).filter_by(nome=nome_busca).first()
+
+            if artista:
+                if artista.albuns:
+                    opcao = input("Deseja deletar o artista e TODOS os seus álbuns? (s/n): ").lower()
+                    if opcao != 's':
+                        print("Operação cancelada.")
+                        return
+
+                session.delete(artista)
+                session.commit()
+                print(f"Artista '{nome_busca}' removido")
+            else:
+                print("Artista não encontrado.")
+        except Exception as error:
+            session.rollback()
+            print(f"Erro: {error}")
+
+# deletar_artista()
+
