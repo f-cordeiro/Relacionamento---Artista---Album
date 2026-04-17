@@ -218,3 +218,23 @@ def atualizar_album():
 
 # atualizar_album()
 
+def deletar_album():
+    with Session() as session:
+        try:
+            nome_busca = input("Digite o nome do álbum que deseja deletar: ").capitalize().strip()
+            album = session.query(Album).filter_by(titulo=nome_busca).first()
+
+            if album:
+                confirmar = input(f"Tem certeza que deseja deletar o álbum {album.titulo}? (s/n): ").lower()
+                if confirmar == 's':
+                    session.delete(album)
+                    session.commit()
+                    print("Álbum deletado com sucesso!")
+            else:
+                print("Álbum não encontrado.")
+        except Exception as error:
+            session.rollback()
+            print(f"Erro: {error}")
+
+# deletar_album()
+
