@@ -162,15 +162,15 @@ def atualizar_artista():
                 if novo_nome:
                     artista.nome = novo_nome.capitalize()
                 
-                novo_genero = input(f"Novo gênero {artista.genero}: ").strip()
+                novo_genero = input(f" {artista.genero} - Novo gênero: ").strip()
                 if novo_genero:
                     artista.genero = novo_genero.capitalize()
 
-                novo_pais = input(f"Novo país {artista.pais}: ").strip()
+                novo_pais = input(f" {artista.pais} - Novo país: ").strip()
                 if novo_pais:
                     artista.pais = novo_pais.capitalize()
 
-                novo_bio = input(f"Nova biografia {artista.biografia}: ").strip()
+                novo_bio = input(f" {artista.biografia} - Nova biografia: ").strip()
                 if novo_bio:
                     artista.biografia = novo_bio.capitalize()
                 
@@ -184,3 +184,37 @@ def atualizar_artista():
             print(f"Erro ao atualizar: {erro}")
 
 # atualizar_artista()
+
+def atualizar_album():
+    with Session() as session:
+        try:
+            nome_busca = input("Digite o nome do álbum que deseja atualizar: ").capitalize().strip()
+            album = session.query(Album).filter_by(titulo=nome_busca).first()
+
+            if album:
+                print(f"Álbum encontrado: {album.titulo}")
+
+                novo_nome = input(f" {album.titulo} - Novo título: ").strip()
+                if novo_nome:
+                    album.titulo = novo_nome.capitalize()
+                
+                novo_ano = input(f" {album.ano_lancamento} - Novo ano: ").strip()
+                if novo_ano:
+                    album.ano_lancamento = int(novo_ano)
+
+                # 3. Atualizar Gravadora
+                novo_gra = input(f" {album.gravadora} - Nova gravadora: ").strip()
+                if novo_gra:
+                    album.gravadora = novo_gra.capitalize()
+                
+                session.commit()
+                print("Dados do álbum atualizados com sucesso!")
+            else:
+                print("Álbum não encontrado.")
+
+        except Exception as erro:
+            session.rollback()
+            print(f"Erro ao atualizar: {erro}")
+
+# atualizar_album()
+
