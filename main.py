@@ -148,3 +148,39 @@ def listar_artistas_album():
             print("Ocorreu um erro!") 
 
 # listar_artistas_album()
+
+def atualizar_artista():
+    with Session() as session:
+        try:
+            nome_busca = input("Digite o nome do artista: ").capitalize().strip()
+            artista = session.query(Artista).filter_by(nome=nome_busca).first()
+
+            if artista:
+                print(f"Artista encontrado: {artista.nome}")
+
+                novo_nome = input(f"Novo nome: ").strip()
+                if novo_nome:
+                    artista.nome = novo_nome.capitalize()
+                
+                novo_genero = input(f"Novo gênero {artista.genero}: ").strip()
+                if novo_genero:
+                    artista.genero = novo_genero.capitalize()
+
+                novo_pais = input(f"Novo país {artista.pais}: ").strip()
+                if novo_pais:
+                    artista.pais = novo_pais.capitalize()
+
+                novo_bio = input(f"Nova biografia {artista.biografia}: ").strip()
+                if novo_bio:
+                    artista.biografia = novo_bio.capitalize()
+                
+                session.commit()
+                print("Dados atualizados com sucesso!")
+            else:
+                print("Artista não encontrado.")
+                
+        except Exception as erro:
+            session.rollback()
+            print(f"Erro ao atualizar: {erro}")
+
+# atualizar_artista()
