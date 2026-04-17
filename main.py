@@ -15,7 +15,7 @@ class Artista(Base):
     albuns = relationship("Album", back_populates="artista")
 
     def __repr__(self):
-        return f"Artista: {self.id}, nome: {self.nome}"
+        return f"nome: {self.nome}"
 
 class Album(Base):
     __tablename__ = "albuns"
@@ -32,7 +32,7 @@ class Album(Base):
     artista = relationship("Artista", back_populates="albuns")
 
     def __repr__(self):
-        return f"Album: {self.id}, nome:{self.titulo}, ano:{self.ano_lancamento}"
+        return f"nome:{self.titulo}, ano:{self.ano_lancamento}"
 
 
 engine = create_engine("sqlite:///produtora.db")
@@ -96,3 +96,55 @@ def cadastrar_album():
             print("Ocorreu um erro!")
 
 # cadastrar_album()
+
+def listar_albuns():
+    with Session() as session:
+        try:
+            todos_albuns = session.query(Album).all()
+
+            if todos_albuns is None:
+                print("Nenhum álbum cadastrado")
+                return
+            
+            for album in todos_albuns:
+                print(f"{album.titulo}")
+
+        except Exception as erro:
+            session.rollback()
+            print("Ocorreu um erro!")
+
+# listar_albuns()
+
+def listar_albuns_artista():
+    with Session() as session:
+        try:
+            nome = input("Digite o nome do artista: ").capitalize().strip()
+
+            artista = session.query(Artista).filter_by(nome=nome).first()
+
+            if artista is None:
+                print(f"Artista {nome} não encontrado")
+                return
+
+            print(f"Álbuns de {nome} - {artista.albuns}")
+
+        except Exception as erro:
+            session.rollback()
+            print("Ocorreu um erro!")  
+
+# listar_albuns_artista() 
+
+def listar_artistas_album():
+    with Session() as session:
+        try:
+            artistas = session.query(Artista).all()
+            
+            for artista in artistas:
+                if artista.albuns:
+                    print(artista.nome)
+
+        except Exception as erro:
+            session.rollback()
+            print("Ocorreu um erro!") 
+
+# listar_artistas_album()
