@@ -64,4 +64,35 @@ def cadastrar_artista():
             session.rollback()
             print("Ocorreu um erro!")
 
-cadastrar_artista()
+# cadastrar_artista()
+
+def cadastrar_album():
+    with Session() as session:
+        try:
+            nome_album = input("Digite o nome do álbum: ").capitalize().strip()
+            ano_lancamento = int(input("Digite o ano de lançamento do álbum: "))
+            gravadora = input("Digite a gravadora do álbum: ").capitalize().strip()
+            novo_artista = input("Digite o nome do artista:  ").capitalize().strip()
+
+            artista_id = session.query(Artista).filter_by(nome=novo_artista).first()
+
+            if artista_id is None:
+                print("Artista não encontrado. Cadastre o novo artista primeiro!")
+                return
+
+            novo_album = Album(
+                titulo = nome_album,
+                ano_lancamento = ano_lancamento,
+                gravadora = gravadora,
+                artista = artista_id
+            )
+
+            session.add(novo_album)
+            session.commit()
+
+            print(f"\n Álbum {nome_album} cadastrado com sucesso !!")
+        except Exception as erro:
+            session.rollback()
+            print("Ocorreu um erro!")
+
+cadastrar_album()
