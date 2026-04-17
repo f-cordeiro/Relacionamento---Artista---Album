@@ -15,7 +15,7 @@ class Artista(Base):
     albuns = relationship("Album", back_populates="artista")
 
     def __repr__(self):
-        return f"Artista: {self.id}, nome: {self.nome}, genero:{self.genero}, país: {self.pais}, biografia: {self.biografia})"
+        return f"Artista: {self.id}, nome: {self.nome}"
 
 class Album(Base):
     __tablename__ = "albuns"
@@ -32,7 +32,7 @@ class Album(Base):
     artista = relationship("Artista", back_populates="albuns")
 
     def __repr__(self):
-        return f"Album: {self.id}, nome:{self.titulo}, ano:{self.ano_lancamento}, gravadora: {self.gravadora}, artista: {self.artista_id}"
+        return f"Album: {self.id}, nome:{self.titulo}, ano:{self.ano_lancamento}"
 
 
 engine = create_engine("sqlite:///produtora.db")
@@ -95,4 +95,4 @@ def cadastrar_album():
             session.rollback()
             print("Ocorreu um erro!")
 
-cadastrar_album()
+# cadastrar_album()
