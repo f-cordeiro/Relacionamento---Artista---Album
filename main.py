@@ -12,6 +12,7 @@ class Artista(Base):
     pais = Column(String(50))
     biografia = Column(Text)
 
+    albuns = relationship("Album", back_populates="artista")
 
     def __repr__(self):
         return f"Artista: {self.id}, nome: {self.nome}, genero:{self.genero}, país: {self.pais}, biografia: {self.biografia})"
@@ -25,6 +26,10 @@ class Album(Base):
     gravadora = Column(String(100))
     
     artista_id = Column(Integer, ForeignKey("artistas.id"))
+
+
+    artista = relationship("Artista", back_populates="albuns")
+    
 
     def __repr__(self):
         return f"Album: {self.id}, nome:{self.titulo}, ano:{self.ano_lancamento}, gravadora: {self.gravadora}, artista: {self.artista_id}"
